@@ -20,74 +20,83 @@
 
 class AssMan
 {
-	private static $_ending = null;
+    private static $_ending = null;
 
-	public static function ver()
-	{
-		if (self::$_ending === null){
-			$toHash = YII_DEBUG ? time() : APP_SERVER_VERSION;
-			self::$_ending = substr(md5($toHash), 0, 6);
-		}
-		return self::$_ending;
-	}
-	private static function cssAndJsPathTpl($fileType)
-	{
-		$min = YII_DEBUG ? '' : $fileType=='js' ? 'min/' : '';
-		return sprintf('%s/public/%s/%s{0}.%s?v=%s',
-			Yii::app()->request->baseUrl,
-			$fileType,
-			$min,
-			$fileType,
-			self::ver()
-		);
-	}
+    public static function ver()
+    {
+        if (self::$_ending === null) {
+            $toHash = YII_DEBUG ? time() : APP_SERVER_VERSION;
+            self::$_ending = substr(md5($toHash), 0, 6);
+        }
+        return self::$_ending;
+    }
+    private static function cssAndJsPathTpl($fileType)
+    {
+        $min = YII_DEBUG ? '' : $fileType=='js' ? 'min/' : '';
+        return sprintf(
+            '%s/public/%s/%s{0}.%s?v=%s',
+            Yii::app()->request->baseUrl,
+            $fileType,
+            $min,
+            $fileType,
+            self::ver()
+        );
+    }
 
-	// css
-	private static $_cssPath = null;
+    // css
+    private static $_cssPath = null;
 
-	public static function css($fileName)
-	{
-		if (self::$_cssPath === null)
-			self::$_cssPath = self::cssAndJsPathTpl('css');
-		return strtr(self::$_cssPath,array('{0}'=>$fileName));
-	}
+    public static function css($fileName)
+    {
+        if (self::$_cssPath === null) {
+            self::$_cssPath = self::cssAndJsPathTpl('css');
+        }
+        return strtr(self::$_cssPath, array('{0}'=>$fileName));
+    }
 
-	// js
-	private static $_jsLibsPath = null;
-	private static $_jsPath = null;
+    // js
+    private static $_jsLibsPath = null;
+    private static $_jsPath = null;
 
-	public static function js($fileName)
-	{
-		if (self::$_jsPath === null)
-			self::$_jsPath = self::cssAndJsPathTpl('js');
-		return strtr(self::$_jsPath,array('{0}'=>$fileName));
-	}
-	public static function jsLib($fileName){
-		if (self::$_jsLibsPath === null)
-			self::$_jsLibsPath = self::jsLibsPathTpl();
-		return strtr(self::$_jsLibsPath,array('{0}'=>$fileName));
-	}
-	private static function jsLibsPathTpl(){
-		return sprintf('%s/public/js/libs/{0}.js?v=%s',
-			Yii::app()->request->baseUrl,
-			self::ver()
-		);
-	}
-	// images
-	private static $imagePath = null;
+    public static function js($fileName)
+    {
+        if (self::$_jsPath === null) {
+            self::$_jsPath = self::cssAndJsPathTpl('js');
+        }
+        return strtr(self::$_jsPath, array('{0}'=>$fileName));
+    }
+    public static function jsLib($fileName)
+    {
+        if (self::$_jsLibsPath === null) {
+            self::$_jsLibsPath = self::jsLibsPathTpl();
+        }
+        return strtr(self::$_jsLibsPath, array('{0}'=>$fileName));
+    }
 
-	public static function img($fileName)
-	{
-		if (self::$imagePath === null)
-			self::$imagePath = self::imagesPathTpl();
-		return strtr(self::$imagePath,array('{0}'=>$fileName));
-	}
-	private static function imagesPathTpl()
-	{
-		$toHash = YII_DEBUG ? time() : APP_SERVER_VERSION;
-		return sprintf('%s/public/images/{0}?v=%s',
-			Yii::app()->request->baseUrl,
-			self::ver()
-		);
-	}
+    private static function jsLibsPathTpl()
+    {
+        return sprintf(
+            '%s/public/js/libs/{0}.js?v=%s',
+            Yii::app()->request->baseUrl,
+            self::ver()
+        );
+    }
+    // images
+    private static $imagePath = null;
+
+    public static function img($fileName)
+    {
+        if (self::$imagePath === null) {
+            self::$imagePath = self::imagesPathTpl();
+        }
+        return strtr(self::$imagePath, array('{0}'=>$fileName));
+    }
+    private static function imagesPathTpl()
+    {
+        return sprintf(
+            '%s/public/images/{0}?v=%s',
+            Yii::app()->request->baseUrl,
+            self::ver()
+        );
+    }
 }
